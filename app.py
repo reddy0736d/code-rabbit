@@ -7,7 +7,6 @@ def main():
     print("The result is:", result)
     print("This is a new update")
     print("Updated by Rohit for testing CodeRabbit")
-    print("Updated by Rohit for testing CodeRabbit")
 
 
 if __name__ == "__main__":
