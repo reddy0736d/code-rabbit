@@ -4,7 +4,7 @@ def add_numbers(a, b):
 def main():
     result = result = add_numbers(10, 20)
     print("The result is:", result)
-    print("This is a new updates")
+    print("This is a new update")
 
 if __name__ == "__main__":
     main()
