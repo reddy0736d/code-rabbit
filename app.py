@@ -9,15 +9,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-   
- 
-    
-def multiply(a, b):
-    return a * b
-
-def main_data():
-    result = multiply(3, 4)
-    print("Multiplication result:", result)
-
-if __name__ == "__main__":
-    main_data()
