@@ -7,5 +7,19 @@ def main():
     print("The result is:", result)
     print("This is a new update")
     print("Updated by Rohit for testing CodeRabbit")
-    print("This is a new update")
-    print("Updated by Arjun for testing CodeRabbit")
+    
+
+
+if __name__ == "__main__":
+    main()
+    
+    
+def multiply(a, b):
+    return a * b
+
+def main():
+    result = multiply(3, 4)
+    print("Multiplication result:", result)
+
+if __name__ == "__main__":
+    main()
