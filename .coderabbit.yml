@@ -1,4 +1,11 @@
-# .coderabbit.yml
+# ============================================================
+# CodeRabbit Configuration – Complete Review and Validation Setup
+# ============================================================
+# This configuration defines both backend and frontend standards
+# for CodeRabbit AI review across your repository.
+# It enforces best practices in code quality, validation logic,
+# and UI/UX consistency (Adobe XD / Figma reference supported).
+# ============================================================
 
 language: "english"
 tone_instructions: "professional and concise"
@@ -9,21 +16,31 @@ knowledge_base:
     - security
     - performance
     - documentation
-    - validation                 # 👈 Add this to tell CodeRabbit to check input validation
+    - validation
+    - accessibility
+    - ui_consistency
 
+# ============================================================
+# Core Review Rules and Code Standards
+# ============================================================
 reviews:
-  indentation: 2
-  naming_style: snake_case
-  require_docstrings: true
-  disallow:
-    - print
-    - console.log
-    - debugger
-    - eval
-    - todo
-  max_function_length: 50
+  indentation: 2                    # Use 2-space indentation
+  naming_style: snake_case          # Enforce snake_case for variables/functions
+  require_docstrings: true          # All functions/classes must include docstrings
 
-  validation_rules:              # 👇 Add a custom validation logic note
+  disallow:
+    - print                         # Disallow print() usage in production code
+    - console.log                   # Disallow console.log() in JS/TS
+    - debugger                      # Disallow debugger statements
+    - eval                          # Disallow eval() (security risk)
+    - todo                          # Disallow TODO/FIXME comments
+
+  max_function_length: 50           # Warn if function exceeds 50 lines
+
+  # ============================================================
+  # Input / Field Validation Rules
+  # ============================================================
+  validation_rules:
     require_field_validation: true
     field_special_characters:
       message: "Field values should not start with special characters. Show an inline error and disable save button."
@@ -31,3 +48,55 @@ reviews:
         - "forms.py"
         - "validation.js"
         - "views/"
+
+  # ============================================================
+  # UI Design Validation and Frontend Code Standards
+  # ============================================================
+  ui_guidelines:
+    design_reference: "https://xd.adobe.com/view/example-design-link"
+    message: "Ensure implemented UI layout, spacing, and color usage match the provided XD/Figma design reference."
+    enforce_in_files:
+      - "src/components/"
+      - "src/pages/"
+
+    checks:
+      spacing_and_alignment:
+        description: "Ensure consistent use of margins, paddings, and layout alignment across components."
+        detects: "Irregular spacing like margin-left: 10px vs 12px."
+        action: "Standardize spacing using design tokens or global CSS variables."
+
+      colors:
+        description: "Ensure use of design system color variables instead of hard-coded values."
+        detects: "Flags 'color: #123456' instead of using 'var(--primary)'."
+        action: "Replace hard-coded colors with theme variables."
+
+      responsiveness:
+        description: "Verify responsive design implementation using flexbox, grid, and media queries."
+        detects: "Missing breakpoints or non-responsive elements."
+        action: "Suggest adding '@media' queries and adaptive layout behavior."
+
+      accessibility:
+        description: "Validate accessibility practices including alt text, ARIA roles, and semantic HTML."
+        detects: "Missing alt attributes or aria-labels in interactive elements."
+        action: "Add appropriate accessibility attributes for compliance."
+
+      component_consistency:
+        description: "Ensure UI elements reuse shared, well-structured components instead of inline styling."
+        detects: "Multiple buttons or cards using inconsistent inline CSS."
+        action: "Refactor into reusable, shared components with consistent styles."
+
+# ============================================================
+# Chat and Code Review Output Preferences
+# ============================================================
+chat:
+  summarize_findings: true           # Summarize all findings in PR
+  group_by_file: true                # Group feedback per file
+  include_code_snippets: true        # Show offending code snippets
+  highlight_best_practices: true     # Highlight good examples as well
+
+# ============================================================
+# Code Generation / Auto Fix Behavior
+# ============================================================
+code_generation:
+  allow_auto_fixes: false            # Disable automatic fixes (manual review preferred)
+  format: markdown                   # Output review summary in markdown format
