@@ -7,7 +7,7 @@
 # and UI/UX consistency (Adobe XD / Figma reference supported).
 # ============================================================
 
-language: "english"
+language: "en"
 tone_instructions: "professional and concise"
 
 knowledge_base:
@@ -24,66 +24,91 @@ knowledge_base:
 # Core Review Rules and Code Standards
 # ============================================================
 reviews:
-  indentation: 2                    # Use 2-space indentation
-  naming_style: snake_case          # Enforce snake_case for variables/functions
-  require_docstrings: true          # All functions/classes must include docstrings
+  # Linter and static analysis tool configurations
+  tools:
+    ruff:
+      enabled: true
+      args:
+        - "--select=E,W,F,I,N,D,S,B,A,C4,RUF"  # Includes naming (N), docstrings (D), and security (S, B)
+        - "--line-length=100"
+        - "--indent-size=2"  # Enforce 2-space indentation
+      config: ".ruff.toml"  # Reference external Ruff configuration
 
-  disallow:
-    - print                         # Disallow print() usage in production code
-    - console.log                   # Disallow console.log() in JS/TS
-    - debugger                      # Disallow debugger statements
-    - eval                          # Disallow eval() (security risk)
-    - todo                          # Disallow TODO/FIXME comments
+    pylint:
+      enabled: true
+      args:
+        - "--max-line-length=100"
+        - "--disable=missing-docstring"  # Ruff handles docstrings; pylint focuses on other checks
 
-  max_function_length: 50           # Warn if function exceeds 50 lines
+    ast-grep:
+      enabled: true
+      patterns: ".ast-grep.yml"  # Reference AST patterns for disallowed constructs (print, console.log, etc.)
+
+
+
+    semgrep:
+      enabled: true
+      config: "p/owasp-top-ten"  # Built-in OWASP Top 10 rules for security and validation
+      rules: ".semgrep.yml"  # Optional custom Semgrep rules for field validation
 
   # ============================================================
-  # Input / Field Validation Rules
+  # Path-specific Review Instructions
   # ============================================================
-  validation_rules:
-    require_field_validation: true
-    field_special_characters:
-      message: "Field values should not start with special characters. Show an inline error and disable save button."
-      enforce_in_files:
-        - "forms.py"
-        - "validation.js"
-        - "views/"
+  path_instructions:
+    - path: "forms.py"
+      instructions: |
+        **Field Validation Required:**
+        - Ensure all form fields validate input before processing.
+        - Fields must NOT start with special characters (except for recognized symbols like $ for currency).
+        - Provide inline error messages for validation failures.
+        - Disable form submission when validation fails.
+
+    - path: "validation.js"
+      instructions: |
+        **Client-side Validation Guidance:**
+        - Validate form inputs on the client side before submission.
+        - Fields must NOT start with special characters (except for recognized symbols).
+        - Show real-time validation feedback to users.
+        - Ensure validation rules align with server-side rules.
+
+    - path: "views/"
+      instructions: |
+        **View-Level Validation:**
+        - Implement input sanitization to prevent invalid characters at field boundaries.
+        - Fields must NOT start with special characters.
+        - Display clear, actionable error messages when validation fails.
+        - Log validation failures for security auditing.
 
   # ============================================================
-  # UI Design Validation and Frontend Code Standards
+  # UI Design Enforcement (externalized)
   # ============================================================
-  ui_guidelines:
-    design_reference: "https://xd.adobe.com/view/example-design-link"
-    message: "Ensure implemented UI layout, spacing, and color usage match the provided XD/Figma design reference."
-    enforce_in_files:
-      - "src/components/"
-      - "src/pages/"
+  # The UI rules are enforced via external scripts and human-review
+  # instructions. Keep machine-checkable rules in CI or external linters
+  # (ESLint/Stylelint/visual tests). Use `path_instructions` to surface
+  # guidance inside CodeRabbit and `pre_merge_checks.custom_checks` to
+  # invoke automated checks during the merge flow.
 
-    checks:
-      spacing_and_alignment:
-        description: "Ensure consistent use of margins, paddings, and layout alignment across components."
-        detects: "Irregular spacing like margin-left: 10px vs 12px."
-        action: "Standardize spacing using design tokens or global CSS variables."
+  pre_merge_checks:
+    custom_checks:
+      - name: "ui_design_checks"
+        script: "scripts/run_ui_checks.sh"
+        description: "Automated UI/UX checks (spacing, colors, responsiveness). Falls back to human review when necessary."
 
-      colors:
-        description: "Ensure use of design system color variables instead of hard-coded values."
-        detects: "Flags 'color: #123456' instead of using 'var(--primary)'."
-        action: "Replace hard-coded colors with theme variables."
+  path_instructions:
+    - path: "src/components/"
+      instructions: |
+        **UI/UX Review Guidance**
+        - Ensure layout, spacing, and color usage match the design reference.
+        - Prefer design tokens and theme variables; avoid hard-coded colors.
+        - Make components responsive and accessible (alt text, ARIA roles).
+        - Run `scripts/run_ui_checks.sh` locally to execute automated checks.
 
-      responsiveness:
-        description: "Verify responsive design implementation using flexbox, grid, and media queries."
-        detects: "Missing breakpoints or non-responsive elements."
-        action: "Suggest adding '@media' queries and adaptive layout behavior."
-
-      accessibility:
-        description: "Validate accessibility practices including alt text, ARIA roles, and semantic HTML."
-        detects: "Missing alt attributes or aria-labels in interactive elements."
-        action: "Add appropriate accessibility attributes for compliance."
-
-      component_consistency:
-        description: "Ensure UI elements reuse shared, well-structured components instead of inline styling."
-        detects: "Multiple buttons or cards using inconsistent inline CSS."
-        action: "Refactor into reusable, shared components with consistent styles."
+    - path: "src/pages/"
+      instructions: |
+        **Page-level UI Guidance**
+        - Verify page layouts across breakpoints and ensure responsiveness.
+        - Validate accessibility attributes and keyboard navigation.
+        - Run `scripts/run_ui_checks.sh` locally to execute automated checks.
 
 # ============================================================
 # Chat and Code Review Output Preferences
