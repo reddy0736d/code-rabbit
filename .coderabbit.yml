@@ -1,0 +1,30 @@
+preferences:
+  indentation: 2-space
+  naming_convention: snake_case
+  require_docstrings: true
+  security_focus: high
+  performance_focus: medium
+  language: english
+  tone: professional
+
+rules:
+  disallow_print_statements: true
+  disallow_console_logs: true
+  disallow_debugger_statements: true
+  disallow_todo_comments: true
+  disallow_eval_usage: true
+  max_function_length: 50
+
+ignore_patterns:
+  - "tests/"
+  - "venv/"
+  - "__pycache__/"
+  - "node_modules/"
+
+output_preferences:
+  summarize_findings: true
+  show_suggestions: true
+  group_by_file: true
+  highlight_best_practices: true
+  include_code_snippets: true
+  report_format: markdown
