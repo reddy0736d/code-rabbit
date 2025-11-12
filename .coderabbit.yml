@@ -1,12 +1,16 @@
 # .coderabbit.yml
+
 language: "english"
 tone_instructions: "professional and concise"
+
 knowledge_base:
   enable: true
   focus_areas:
     - security
     - performance
     - documentation
+    - validation                 # 👈 Add this to tell CodeRabbit to check input validation
+
 reviews:
   indentation: 2
   naming_style: snake_case
@@ -18,16 +22,12 @@ reviews:
     - eval
     - todo
   max_function_length: 50
-  ignore:
-    - "tests/"
-    - "venv/"
-    - "__pycache__/"
-    - "node_modules/"
-chat:
-  summarize_findings: true
-  group_by_file: true
-  include_code_snippets: true
-  highlight_best_practices: true
-code_generation:
-  allow_auto_fixes: false
-  format: markdown
+
+  validation_rules:              # 👇 Add a custom validation logic note
+    require_field_validation: true
+    field_special_characters:
+      message: "Field values should not start with special characters. Show an inline error and disable save button."
+      enforce_in_files:
+        - "forms.py"
+        - "validation.js"
+        - "views/"
