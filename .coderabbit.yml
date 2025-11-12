@@ -6,14 +6,10 @@ language: "en-US"                      # ✅ Correct ISO format
 tone_instructions: "professional and concise"
 
 knowledge_base:
-  enable: true
-  focus_areas:
-    - security
-    - performance
-    - documentation
-    - validation
-    - accessibility
-    - ui_consistency
+  +  web_search:
+  +    enabled: true
+  +  code_guidelines:
+  +    enabled: true
 
 # ============================================================
 # Review Configuration
