@@ -1,30 +1,33 @@
-preferences:
-  indentation: 2-space
-  naming_convention: snake_case
+# .coderabbit.yml
+language: "english"
+tone_instructions: "professional and concise"
+knowledge_base:
+  enable: true
+  focus_areas:
+    - security
+    - performance
+    - documentation
+reviews:
+  indentation: 2
+  naming_style: snake_case
   require_docstrings: true
-  security_focus: high
-  performance_focus: medium
-  language: english
-  tone: professional
-
-rules:
-  disallow_print_statements: true
-  disallow_console_logs: true
-  disallow_debugger_statements: true
-  disallow_todo_comments: true
-  disallow_eval_usage: true
+  disallow:
+    - print
+    - console.log
+    - debugger
+    - eval
+    - todo
   max_function_length: 50
-
-ignore_patterns:
-  - "tests/"
-  - "venv/"
-  - "__pycache__/"
-  - "node_modules/"
-
-output_preferences:
+  ignore:
+    - "tests/"
+    - "venv/"
+    - "__pycache__/"
+    - "node_modules/"
+chat:
   summarize_findings: true
-  show_suggestions: true
   group_by_file: true
-  highlight_best_practices: true
   include_code_snippets: true
-  report_format: markdown
+  highlight_best_practices: true
+code_generation:
+  allow_auto_fixes: false
+  format: markdown
