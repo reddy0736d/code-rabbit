@@ -1,13 +1,10 @@
 # ============================================================
-# CodeRabbit Configuration – Complete Review and Validation Setup
+# CodeRabbit Configuration (2025 Schema Compatible)
 # ============================================================
-# This configuration defines both backend and frontend standards
-# for CodeRabbit AI review across your repository.
-# It enforces best practices in code quality, validation logic,
-# and UI/UX consistency (Adobe XD / Figma reference supported).
+# Backend + Frontend review rules with UI consistency guidance
 # ============================================================
 
-language: "en"
+language: "en-US"
 tone_instructions: "professional and concise"
 
 knowledge_base:
@@ -21,107 +18,51 @@ knowledge_base:
     - ui_consistency
 
 # ============================================================
-# Core Review Rules and Code Standards
+# Core Review Behavior
 # ============================================================
 reviews:
-  # Linter and static analysis tool configurations
+  summary: true
+  focus_on_changed_files: true
+
   tools:
     ruff:
       enabled: true
-      args:
-        - "--select=E,W,F,I,N,D,S,B,A,C4,RUF"  # Includes naming (N), docstrings (D), and security (S, B)
-        - "--line-length=100"
-        - "--indent-size=2"  # Enforce 2-space indentation
-      config: ".ruff.toml"  # Reference external Ruff configuration
-
-    pylint:
+      config_file: "pyproject.toml"    # Python linting rules
+    eslint:
       enabled: true
-      args:
-        - "--max-line-length=100"
-        - "--disable=missing-docstring"  # Ruff handles docstrings; pylint focuses on other checks
-
+      config_file: ".eslintrc.json"    # JS/React linting rules
     ast-grep:
-      enabled: true
-      patterns: ".ast-grep.yml"  # Reference AST patterns for disallowed constructs (print, console.log, etc.)
+      enabled: true                    # Pattern-based validation
 
-
-
-    semgrep:
-      enabled: true
-      config: "p/owasp-top-ten"  # Built-in OWASP Top 10 rules for security and validation
-      rules: ".semgrep.yml"  # Optional custom Semgrep rules for field validation
-
-  # ============================================================
-  # Path-specific Review Instructions
-  # ============================================================
   path_instructions:
-    - path: "forms.py"
-      instructions: |
-        **Field Validation Required:**
-        - Ensure all form fields validate input before processing.
-        - Fields must NOT start with special characters (except for recognized symbols like $ for currency).
-        - Provide inline error messages for validation failures.
-        - Disable form submission when validation fails.
-
-    - path: "validation.js"
-      instructions: |
-        **Client-side Validation Guidance:**
-        - Validate form inputs on the client side before submission.
-        - Fields must NOT start with special characters (except for recognized symbols).
-        - Show real-time validation feedback to users.
-        - Ensure validation rules align with server-side rules.
-
-    - path: "views/"
-      instructions: |
-        **View-Level Validation:**
-        - Implement input sanitization to prevent invalid characters at field boundaries.
-        - Fields must NOT start with special characters.
-        - Display clear, actionable error messages when validation fails.
-        - Log validation failures for security auditing.
-
-  # ============================================================
-  # UI Design Enforcement (externalized)
-  # ============================================================
-  # The UI rules are enforced via external scripts and human-review
-  # instructions. Keep machine-checkable rules in CI or external linters
-  # (ESLint/Stylelint/visual tests). Use `path_instructions` to surface
-  # guidance inside CodeRabbit and `pre_merge_checks.custom_checks` to
-  # invoke automated checks during the merge flow.
+    "forms.py":
+      - "Check for input validation logic (no special chars at start)."
+    "validation.js":
+      - "Ensure Save button is disabled when invalid inputs are detected."
+    "views/":
+      - "Ensure input fields show inline validation messages."
 
   pre_merge_checks:
     custom_checks:
-      - name: "ui_design_checks"
-        script: "scripts/run_ui_checks.sh"
-        description: "Automated UI/UX checks (spacing, colors, responsiveness). Falls back to human review when necessary."
+      - name: "Field Validation Rules"
+        description: "Ensure input fields validate special characters and disable Save on invalid input."
+        enforcement: "manual-review"
+      - name: "UI/UX Consistency Check"
+        description: "Confirm UI layout, spacing, color usage, and accessibility match Adobe XD/Figma design."
+        guidance:
+          - "Check margin/padding consistency using design tokens."
+          - "Use theme color variables instead of hard-coded values."
+          - "Ensure responsiveness via flexbox/grid and media queries."
+          - "Verify all images have alt text and elements have aria labels."
+          - "Ensure reusable components (buttons, cards) follow consistent styles."
+        enforcement: "manual-review"
 
-  path_instructions:
-    - path: "src/components/"
-      instructions: |
-        **UI/UX Review Guidance**
-        - Ensure layout, spacing, and color usage match the design reference.
-        - Prefer design tokens and theme variables; avoid hard-coded colors.
-        - Make components responsive and accessible (alt text, ARIA roles).
-        - Run `scripts/run_ui_checks.sh` locally to execute automated checks.
-
-    - path: "src/pages/"
-      instructions: |
-        **Page-level UI Guidance**
-        - Verify page layouts across breakpoints and ensure responsiveness.
-        - Validate accessibility attributes and keyboard navigation.
-        - Run `scripts/run_ui_checks.sh` locally to execute automated checks.
-
-# ============================================================
-# Chat and Code Review Output Preferences
-# ============================================================
 chat:
-  summarize_findings: true           # Summarize all findings in PR
-  group_by_file: true                # Group feedback per file
-  include_code_snippets: true        # Show offending code snippets
-  highlight_best_practices: true     # Highlight good examples as well
+  summarize_findings: true
+  group_by_file: true
+  include_code_snippets: true
+  highlight_best_practices: true
 
-# ============================================================
-# Code Generation / Auto Fix Behavior
-# ============================================================
 code_generation:
-  allow_auto_fixes: false            # Disable automatic fixes (manual review preferred)
-  format: markdown                   # Output review summary in markdown format
+  allow_auto_fixes: false
+  format: markdown
