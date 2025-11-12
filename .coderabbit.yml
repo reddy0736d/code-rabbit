@@ -1,10 +1,8 @@
 # ============================================================
-# CodeRabbit Configuration (2025 Schema Compatible)
-# ============================================================
-# Backend + Frontend review rules with UI consistency guidance
+# CodeRabbit Configuration (2025 Schema-Compliant)
 # ============================================================
 
-language: "en-US"
+language: "en-US"                      # ✅ Correct ISO format
 tone_instructions: "professional and concise"
 
 knowledge_base:
@@ -18,45 +16,46 @@ knowledge_base:
     - ui_consistency
 
 # ============================================================
-# Core Review Behavior
+# Review Configuration
 # ============================================================
 reviews:
-  summary: true
-  focus_on_changed_files: true
+  high_level_summary: true             # ✅ Correct property
+  changed_files_summary: true          # ✅ Correct property
 
   tools:
     ruff:
       enabled: true
-      config_file: "pyproject.toml"    # Python linting rules
+      config_file: "pyproject.toml"
     eslint:
       enabled: true
-      config_file: ".eslintrc.json"    # JS/React linting rules
+      config_file: ".eslintrc.json"
     ast-grep:
-      enabled: true                    # Pattern-based validation
+      enabled: true
 
+  # ============================================================
+  # File-Specific Review Instructions
+  # ============================================================
   path_instructions:
-    "forms.py":
-      - "Check for input validation logic (no special chars at start)."
-    "validation.js":
-      - "Ensure Save button is disabled when invalid inputs are detected."
-    "views/":
-      - "Ensure input fields show inline validation messages."
+    - path: "forms.py"
+      instructions: "Check for input validation logic (no leading special characters)."
+    - path: "validation.js"
+      instructions: "Ensure Save button is disabled when invalid inputs are detected."
+    - path: "views/**"
+      instructions: "Ensure input fields display inline error messages for invalid inputs."
 
+  # ============================================================
+  # Custom Pre-Merge Checks
+  # ============================================================
   pre_merge_checks:
     custom_checks:
       - name: "Field Validation Rules"
-        description: "Ensure input fields validate special characters and disable Save on invalid input."
-        enforcement: "manual-review"
+        instructions: "Ensure all input fields validate special characters (no leading special chars) and disable the Save button when invalid data is entered."
       - name: "UI/UX Consistency Check"
-        description: "Confirm UI layout, spacing, color usage, and accessibility match Adobe XD/Figma design."
-        guidance:
-          - "Check margin/padding consistency using design tokens."
-          - "Use theme color variables instead of hard-coded values."
-          - "Ensure responsiveness via flexbox/grid and media queries."
-          - "Verify all images have alt text and elements have aria labels."
-          - "Ensure reusable components (buttons, cards) follow consistent styles."
-        enforcement: "manual-review"
+        instructions: "Confirm UI layout, spacing, color usage, and accessibility match Adobe XD/Figma design: (1) Check consistent margins and paddings; (2) Use theme color variables instead of hard-coded colors; (3) Ensure responsiveness via flexbox or grid; (4) Add alt text to images and aria labels; (5) Reuse shared components for consistency."
 
+# ============================================================
+# Review Output and Code Generation Settings
+# ============================================================
 chat:
   summarize_findings: true
   group_by_file: true
