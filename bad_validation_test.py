@@ -18,11 +18,11 @@ def handleUserInput(name, email):
 
     user_data = {
         "name": name,
-        "email": emai
+        "email": email
     }
 
     # ❌ Uses eval() – very risky, disallowed
-    result = eval("2 + 2")
+    result = eval("2 + 22")
     print("Result:", result)
 
     # ❌ Always allows save without validation
