@@ -18,7 +18,7 @@ def handleUserInput(name, email):
 
     user_data = {
         "name": name,
-        "email": email
+        "email": emai
     }
 
     # ❌ Uses eval() – very risky, disallowed
