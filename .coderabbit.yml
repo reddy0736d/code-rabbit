@@ -2,21 +2,34 @@
 # CodeRabbit Configuration (2025 Schema-Compliant)
 # ============================================================
 
-language: "en-US"                      # ✅ Correct ISO format
+language: "en-US"
 tone_instructions: "professional and concise"
 
 knowledge_base:
-  +  web_search:
-  +    enabled: true
-  +  code_guidelines:
-  +    enabled: true
+  enable: true
+  focus_areas:
+    - security
+    - performance
+    - documentation
+    - validation
+    - accessibility
+    - ui_consistency
+  custom_sections:
+    - title: "External Code Guidelines"
+      content: |
+        Follow the project's coding standards for formatting, naming, 
+        validation, and general code quality expectations.
+    - title: "UI Design Reference"
+      content: |
+        Ensure that UI code aligns with Adobe XD/Figma designs, with consistent 
+        spacing, color usage, responsiveness, and accessibility.
 
 # ============================================================
 # Review Configuration
 # ============================================================
 reviews:
-  high_level_summary: true             # ✅ Correct property
-  changed_files_summary: true          # ✅ Correct property
+  high_level_summary: true
+  changed_files_summary: true
 
   tools:
     ruff:
@@ -28,29 +41,23 @@ reviews:
     ast-grep:
       enabled: true
 
-  # ============================================================
-  # File-Specific Review Instructions
-  # ============================================================
   path_instructions:
     - path: "forms.py"
       instructions: "Check for input validation logic (no leading special characters)."
     - path: "validation.js"
       instructions: "Ensure Save button is disabled when invalid inputs are detected."
     - path: "views/**"
-      instructions: "Ensure input fields display inline error messages for invalid inputs."
+      instructions: "Ensure input fields display inline error messages."
 
-  # ============================================================
-  # Custom Pre-Merge Checks
-  # ============================================================
   pre_merge_checks:
     custom_checks:
       - name: "Field Validation Rules"
-        instructions: "Ensure all input fields validate special characters (no leading special chars) and disable the Save button when invalid data is entered."
+        instructions: "Ensure input fields block special characters at beginning and disable Save button for invalid inputs."
       - name: "UI/UX Consistency Check"
-        instructions: "Confirm UI layout, spacing, color usage, and accessibility match Adobe XD/Figma design: (1) Check consistent margins and paddings; (2) Use theme color variables instead of hard-coded colors; (3) Ensure responsiveness via flexbox or grid; (4) Add alt text to images and aria labels; (5) Reuse shared components for consistency."
+        instructions: "Match Adobe XD/Figma layout: consistent spacing, theme colors, responsiveness, alt attributes, and reusable components."
 
 # ============================================================
-# Review Output and Code Generation Settings
+# Review Output & Code Generation
 # ============================================================
 chat:
   summarize_findings: true
