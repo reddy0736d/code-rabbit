@@ -1,0 +1,70 @@
+# ============================================================
+# CodeRabbit Configuration (2025 Schema-Compliant)
+# ============================================================
+
+language: "en-US"
+tone_instructions: "professional and concise"
+
+knowledge_base:
+  enable: true
+  focus_areas:
+    - security
+    - performance
+    - documentation
+    - validation
+    - accessibility
+    - ui_consistency
+  custom_sections:
+    - title: "External Code Guidelines"
+      content: |
+        Follow the project's coding standards for formatting, naming, 
+        validation, and general code quality expectations.
+    - title: "UI Design Reference"
+      content: |
+        Ensure that UI code aligns with Adobe XD/Figma designs, with consistent 
+        spacing, color usage, responsiveness, and accessibility.
+
+# ============================================================
+# Review Configuration
+# ============================================================
+reviews:
+  high_level_summary: true
+  changed_files_summary: true
+
+  tools:
+    ruff:
+      enabled: true
+      config_file: "pyproject.toml"
+    eslint:
+      enabled: true
+      config_file: ".eslintrc.json"
+    ast-grep:
+      enabled: true
+
+  path_instructions:
+    - path: "forms.py"
+      instructions: "Check for input validation logic (no leading special characters)."
+    - path: "validation.js"
+      instructions: "Ensure Save button is disabled when invalid inputs are detected."
+    - path: "views/**"
+      instructions: "Ensure input fields display inline error messages."
+
+  pre_merge_checks:
+    custom_checks:
+      - name: "Field Validation Rules"
+        instructions: "Ensure input fields block special characters at beginning and disable Save button for invalid inputs."
+      - name: "UI/UX Consistency Check"
+        instructions: "Match Adobe XD/Figma layout: consistent spacing, theme colors, responsiveness, alt attributes, and reusable components."
+
+# ============================================================
+# Review Output & Code Generation
+# ============================================================
+chat:
+  summarize_findings: true
+  group_by_file: true
+  include_code_snippets: true
+  highlight_best_practices: true
+
+code_generation:
+  allow_auto_fixes: false
+  format: markdown

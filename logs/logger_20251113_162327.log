@@ -1,0 +1,5 @@
+2025-11-13 16:23:27 | INFO | logger | Logger initialized for logger.py - Log file: ./logs\logger_20251113_162327.log
+2025-11-13 16:23:27 | INFO | logger | Testing the automatic logging system
+2025-11-13 16:23:27 | WARNING | logger | This is a warning message
+2025-11-13 16:23:27 | ERROR | logger | This is an error message
+2025-11-13 16:23:27 | CRITICAL | logger | This is a critical message
